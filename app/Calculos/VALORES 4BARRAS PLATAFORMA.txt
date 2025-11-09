@@ -1,0 +1,142 @@
+
+        % Value changed function: TipoMecanismoDropDown
+        function TipoMecanismoDropDownValueChanged(app, event)
+    
+        %%valores fijos
+      % tipo = app.TipoMecanismoDropDown.Value;
+      % 
+      %   switch tipo
+      %       case 'Tipo 2 - GCRR'
+      %           app.aDropDown.Value = '14';
+      %           app.bDropDown.Value = '17';
+      %           app.cDropDown.Value = '17';
+      %           app.dDropDown.Value = '18';
+      %           app.theta2DegEditField_2.Value = 360;
+      % 
+      %       case 'Tipo 3 - GRCR'
+      %           app.aDropDown.Value = '14';
+      %           app.bDropDown.Value = '16';
+      %           app.cDropDown.Value = '17';
+      %           app.dDropDown.Value = '18';
+      %           app.theta2DegEditField_2.Value = 360;
+      % 
+      %       case 'Tipo 4 - GRCC'
+      %           app.aDropDown.Value = '14';
+      %           app.bDropDown.Value = '16';
+      %           app.cDropDown.Value = '18';
+      %           app.dDropDown.Value = '18';
+      %           app.theta2DegEditField_2.Value = 40;
+      % 
+      %       case 'Tipo 11 - SRRC'
+      %           app.aDropDown.Value = '14';
+      %           app.bDropDown.Value = '14';
+      %           app.cDropDown.Value = '17';
+      %           app.dDropDown.Value = '18';
+      %           app.theta2DegEditField_2.Value = 40;
+      % 
+      %       case 'Tipo 13 - S2X'
+      %           app.aDropDown.Value = '14';
+      %           app.bDropDown.Value = '14';
+      %           app.cDropDown.Value = '14';
+      %           app.dDropDown.Value = '14';
+      %           app.theta2DegEditField_2.Value = 90;
+      % 
+      %       otherwise
+      %           % Limpia los campos si se elige "Seleccione..." u opción vacía
+      %           app.aDropDown.Value = '';
+      %           app.bDropDown.Value = '';
+      %           app.cDropDown.Value = '';
+      %           app.dDropDown.Value = '';
+      %           app.theta2DegEditField_2.Value = '';
+      %   end
+      % 
+
+
+      %% Valores aleatorios
+
+
+      tipo = app.TipoMecanismoDropDown.Value;
+    
+        % Estructura de posibles combinaciones
+        valores = struct();
+    
+      
+        valores.GCRR = {
+            [14 16 17 18], [15 17 19 20], [14 17 18 19], [14 17 17 19], [14 17 17 18], [14 15 16 16], [15 16 18 18]
+            };
+        valores.GRCR = {
+            [16 14 17 18], [17 15 19 20], [17 14 17 19], [15 14 16 16], [16 15 18 18]
+            };
+        valores.GRCC = {
+            [16 17 14 18], [17 19 15 20], [18 17 14 19], [17 17 14 19], [17 17 14 18], [15 16 14 16], [18 16 15 18]
+
+            };
+        valores.RRR1 = {
+            [14 15 16 18],[14 14 15 18], [14 15 17 19], [14 15 17 19], [15 14 14 20], [14 16 15 20], [14 14 14 20]
+                                                                       %%u_amarillo    %%u_amarillo
+            };
+
+         valores.SCRR = {
+            [14 16 17 19], [14 15 16 17], [15 17 16 18], [15 16 16 17], [14 15 16 17], [16 17 18 19], [17 18 19 20]
+            };
+        valores.SRCR = {
+           [16 14 17 19], [15 14 16 17], [17 15 16 18], [16 15 16 17], [15 14 16 17], [18 16 17 19], [18 17 19 20]
+
+            };
+        valores.SRRC = {
+            [16 17 14 19], [15 16 14 17], [17 16 15 18], [16 16 15 17], [15 16 14 17], [18 17 16 19], [18 19 17 20]
+
+            };
+        valores.S2X = {
+            [14 17 14 17],  [15 18 15 18],  [16 19 16 19], [15 20 15 20]
+            };
+        valores.S3X = {
+            [17 17 17 17], [15 15 15 15], [16 16 16 16], [18 18 18 18], [19 19 19 19]
+            };
+    
+        % Función auxiliar: seleccionar una combinación aleatoria
+        function asignarValores(opciones)
+            if isempty(opciones)
+                uialert(app.UIFigure, 'No hay combinaciones registradas para este tipo.', ...
+                    'Sin valores', 'Icon', 'warning');
+                return;
+            end
+            idx = randi(length(opciones)); % índice aleatorio
+            sel = opciones{idx};
+    
+            app.aDropDown.Value = num2str(sel(1));
+            app.bDropDown.Value = num2str(sel(2));
+            app.cDropDown.Value = num2str(sel(3));
+            app.dDropDown.Value = num2str(sel(4));
+            app.theta2DegEditField_2.Value = 40; % valor por defecto
+    
+            % Ejecuta automáticamente el cálculo
+            Calcular_4barrasnormal_2ButtonPushed(app, []);
+        end
+    
+        % Asigna según tipo
+        switch tipo
+            case 'Tipo 2 - GCRR'
+                asignarValores(valores.GCRR);
+            case 'Tipo 3 - GRCR'
+                asignarValores(valores.GRCR);
+            case 'Tipo 4 - GRCC'
+                asignarValores(valores.GRCC);
+            case 'Tipo 5 - RRR1'
+                asignarValores(valores.RRR1);
+            case 'Tipo 10 - SCRR'
+                asignarValores(valores.SCRR);
+            case 'Tipo 11 - SRCR'
+                asignarValores(valores.SRCR);
+            case 'Tipo 12 - SRRC'
+                asignarValores(valores.SRRC);
+            case 'Tipo 13 - S2X'
+                asignarValores(valores.S2X);
+            otherwise
+                disp('Seleccione un tipo válido');
+        end
+
+
+       
+
+        end
